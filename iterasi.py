@@ -93,5 +93,39 @@ output_frame = ttk.LabelFrame(self.root, text="Hasil Iterasi", padding=(15, 10),
         )
         self.result_label.pack(pady=10)
 
+    def clear_results(self):
+        """Membersihkan hasil tabel dan label sebelum proses baru."""
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        self.result_label.config(text="Hasil akhir akan muncul di sini.", foreground="#007f5f")
+        self.g_auto_label.config(text="g(x) akan ditampilkan di sini...")
+
+    def validate_and_prepare(self):
+        """Validasi input pengguna dan bentuk fungsi g(x) dari f(x)."""
+        try:
+            f_str = self.f_expr_var.get()
+            x0 = float(self.x0_var.get())
+            epsilon = float(self.epsilon_var.get())
+            N = int(self.n_var.get())
+        except ValueError:
+            messagebox.showerror("Error", "Input numerik tidak valid.")
+            return None
+
+        try:
+            x = symbols("x")
+            f_expr = sympify(f_str)
+        except SympifyError:
+            messagebox.showerror("Error", "Persamaan tidak valid.")
+            return None
+
+        # Membentuk fungsi g(x) otomatis
+        a = f_expr.expand().coeff(x, 2)
+        b = f_expr.expand().coeff(x, 1)
+        c = f_expr.expand().coeff(x, 0)
+        g_expr = -c / (a*x + b)
+        self.g_auto_label.config(text=f"g(x) = {g_expr}")
+
+        return f_expr, g_expr, x, x0, epsilon, N
+
  
 
