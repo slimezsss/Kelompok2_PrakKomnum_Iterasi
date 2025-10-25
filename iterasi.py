@@ -65,3 +65,33 @@ class FixedPointApp:
             style="TButton"
         ).pack(pady=10, padx=10, fill="x")
 
+output_frame = ttk.LabelFrame(self.root, text="Hasil Iterasi", padding=(15, 10), style="TLabelframe")
+        output_frame.pack(padx=10, pady=10, fill="both", expand=True)
+
+        self.g_auto_label = ttk.Label(output_frame, text="g(x) akan ditampilkan di sini...", style="Header.TLabel")
+        self.g_auto_label.pack(pady=(0, 10))
+
+        columns = ("iterasi", "x", "g(x)", "f(x)")
+        self.tree = ttk.Treeview(output_frame, columns=columns, show="headings", style="Treeview")
+
+        for col in columns:
+            self.tree.heading(col, text=col)
+            self.tree.column(col, anchor="center", width=140)
+
+        scrollbar = ttk.Scrollbar(output_frame, orient=tk.VERTICAL, command=self.tree.yview)
+        self.tree.configure(yscroll=scrollbar.set)
+        scrollbar.pack(side="right", fill="y")
+        self.tree.pack(fill="both", expand=True)
+
+        # Label hasil akhir
+        self.result_label = ttk.Label(
+            self.root,
+            text="Hasil akhir akan muncul di sini.",
+            background=light_gray,
+            foreground="#007f5f",
+            font=("Segoe UI", 10, "italic")
+        )
+        self.result_label.pack(pady=10)
+
+ 
+
