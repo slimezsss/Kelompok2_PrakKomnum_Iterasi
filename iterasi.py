@@ -127,5 +127,53 @@ output_frame = ttk.LabelFrame(self.root, text="Hasil Iterasi", padding=(15, 10),
 
         return f_expr, g_expr, x, x0, epsilon, N
 
- 
+    def run_calculation(self):
+        """Proses utama perhitungan metode Fixed Point Iteration."""
+        self.clear_results()
 
+        # Ambil data dan validasi input
+        prepared = self.validate_and_prepare()
+        if prepared is None:
+            return
+        f_expr, g_expr, x, x0, epsilon, N = prepared
+
+        f = lambda val: float(f_expr.subs(x, val))
+        g = lambda val: float(g_expr.subs(x, val))
+
+        x_old = x0
+        converged = False
+
+        # Iterasi utama metode titik tetap
+        for i in range(1, N + 1):
+            try:
+                x_new = g(x_old)
+                fx = f(x_old)
+                self.tree.insert("", tk.END, values=(i, f"{x_old:.9f}", f"{x_new:.9f}", f"{fx:.9f}"))
+
+                # Cek konvergensi
+                if abs(x_new - x_old) < epsilon:
+                    converged = True
+                    break
+                x_old = x_new
+            except ZeroDivisionError:
+                messagebox.showerror("Error", "Terjadi pembagian dengan nol!")
+                return
+
+        # Hasil akhir
+        x_final = x_old
+        fx_final = f(x_final)
+
+        if converged:
+            msg = f"Konvergen setelah {i} iterasi.\n\nx ≈ {x_final:.9f}\n|f(x)| = {abs(fx_final):.9f}\nError < {epsilon}"
+            self.result_label.config(text=f"Akar konvergen: x ≈ {x_final:.9f}", foreground="#007f5f")
+            messagebox.showinfo("Hasil Akhir", msg)
+        else:
+            msg = f"Tidak konvergen setelah {N} iterasi.\nPendekatan terakhir:\nx ≈ {x_final:.9f}\n|f(x)| = {abs(fx_final):.9f}"
+            self.result_label.config(text=f"Tidak konvergen: x ≈ {x_final:.9f}", foreground="orange")
+            messagebox.showwarning("Tidak Konvergen", msg)
+
+#Main Program
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = FixedPointApp(root)
+    root.mainloop()
