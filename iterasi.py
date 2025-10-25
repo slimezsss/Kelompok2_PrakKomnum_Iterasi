@@ -34,3 +34,34 @@ class FixedPointApp:
                         fieldbackground="white", font=("Segoe UI", 10))
         style.configure("Treeview.Heading", background=header_green, foreground="#004d40", font=("Segoe UI", 10, "bold"))
         style.map("Treeview.Heading", background=[("active", "#a9d6bf")])
+
+        # ==== FRAME INPUT ====
+        input_frame = ttk.LabelFrame(self.root, text="Parameter Input", padding=(15, 10), style="TLabelframe")
+        input_frame.pack(padx=10, pady=10, fill="x")
+
+        ttk.Label(input_frame, text="Persamaan f(x) = 0:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        self.f_expr_var = tk.StringVar(value="x**2 - 2*x - 3")
+        ttk.Entry(input_frame, textvariable=self.f_expr_var, width=30).grid(row=0, column=1, sticky="ew", padx=5, pady=5)
+
+        ttk.Label(input_frame, text="Nilai Awal (x₀):").grid(row=1, column=0, sticky="w", padx=5, pady=5)
+        self.x0_var = tk.StringVar(value="4")
+        ttk.Entry(input_frame, textvariable=self.x0_var, width=15).grid(row=1, column=1, sticky="w", padx=5, pady=5)
+
+        ttk.Label(input_frame, text="Toleransi (ε):").grid(row=2, column=0, sticky="w", padx=5, pady=5)
+        self.epsilon_var = tk.StringVar(value="0.0001")
+        ttk.Entry(input_frame, textvariable=self.epsilon_var, width=15).grid(row=2, column=1, sticky="w", padx=5, pady=5)
+
+        ttk.Label(input_frame, text="Maks Iterasi (N):").grid(row=3, column=0, sticky="w", padx=5, pady=5)
+        self.n_var = tk.StringVar(value="15")
+        ttk.Entry(input_frame, textvariable=self.n_var, width=15).grid(row=3, column=1, sticky="w", padx=5, pady=5)
+
+        input_frame.columnconfigure(1, weight=1)
+
+        # Tombol eksekusi
+        ttk.Button(
+            self.root,
+            text="Jalankan Iterasi",
+            command=self.run_calculation,
+            style="TButton"
+        ).pack(pady=10, padx=10, fill="x")
+
