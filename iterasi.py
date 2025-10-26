@@ -151,7 +151,7 @@ output_frame = ttk.LabelFrame(self.root, text="Hasil Iterasi", padding=(15, 10),
                 self.tree.insert("", tk.END, values=(i, f"{x_old:.9f}", f"{x_new:.9f}", f"{fx:.9f}"))
 
                 # Cek konvergensi
-                if abs(x_new - x_old) < epsilon:
+                if abs(x_new - x_old) < epsilon or abs(fx) < epsilon::
                     converged = True
                     break
                 x_old = x_new
